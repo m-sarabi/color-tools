@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Color Tools</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Color Tools">
+    <link rel="icon" type="Image/png" href="/assets/color-tools-icon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main>
+    <aside id="tools-title">
+        <h2>Tools</h2>
+        <hr><br>
+        <button class="sidebar-btn" id="gradient-tool">Gradient Generator</button>
+    </aside>
+    <div id="gradient-tools" class="tool-container">
+        <div id="gradient-inputs">
+            <div class="color-input">
+                <div>
+                    <label for="gradient-color1"></label><input type="color" value="#000000" id="gradient-color1">
+                </div>
+                <div>
+                    <label for="gradient-color2"></label><input type="color" value="#ffffff" id="gradient-color2">
+                </div>
+            </div>
+            <div class="range-input">
+                <label for="gradient-range"></label>
+                <input type="range" min="2" max="30" value="10" id="gradient-range">
+                <label for="gradient-number"></label>
+                <input type="number" min="2" max="30" value="10" id="gradient-number">
+            </div>
+        </div>
+        <div id="gradient-colors"></div>
+    </div>
+</main>
+<footer>
+    <div id="copyright">
+        &copy; 2022 MSarabi
+    </div>
+</footer>
+<script src="js/script.js"></script>
+<script src="js/utils.js"></script>
+</body>
+</html>

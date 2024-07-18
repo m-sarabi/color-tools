@@ -1,0 +1,209 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    font-family: sans-serif;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    background-color: #3092fd;
+    color: #fff;
+    font-size: 14px;
+    position: fixed;
+    bottom: 0;
+}
+
+aside {
+    width: 200px;
+    height: fit-content;
+    padding: 20px 20px 50px;
+    background-color: #3092fd;
+    border-radius: 0 0 50px 0;
+}
+
+aside > button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+aside > button:hover {
+    background-color: #f0f0f0;
+}
+
+input[type=color] {
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+/* todo: side bar styles*/
+
+div:has( > input[type=color]) {
+    border: 1px solid #0008;
+    border-radius: 5px;
+    position: relative;
+}
+
+div:has( > input[type=color]):before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 5px;
+    border: 1px solid #fff8;
+}
+
+input[type=number] {
+    appearance: none;
+    -moz-appearance: textfield;
+    font-weight: bold;
+    border: 1px solid #0004;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    padding: 4px 0;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.tool-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 800px;
+    padding: 20px 20px 40px;
+    border-radius: 10px;
+    background-color: #fff8;
+    box-shadow: 0 0 4px 1px #0004 inset;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -25%);
+}
+
+.color-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.range-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+}
+
+.range-input > input[type=range] {
+    width: 90%;
+}
+
+.range-input > input[type=number] {
+    width: 60px;
+    text-align: center;
+}
+
+
+.color-box {
+    flex: 1 1;
+    height: 100%;
+    min-width: 0;
+    display: flex;
+    transition: flex 0.2s ease;
+}
+
+.color-box:hover {
+    flex: 2 1;
+    cursor: pointer;
+}
+.copy-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    z-index: 2;
+}
+
+.copy-btn > span {
+    background: #fff8;
+    padding: 3px 5px;
+    border-radius: 5px;
+    border: 1px solid #0004;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s ease, opacity 0.2s ease;
+}
+
+.copy-btn:hover > span {
+    visibility: visible;
+    opacity: 1;
+}
+
+div:has(>input[type=color]) {
+    width: 120px;
+    height: 74px;
+}
+
+#gradient-inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    box-shadow: 0 0 6px 1px #0006;
+    border-radius: 10px;
+}
+
+#gradient-colors {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 90%;
+    height: 200px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+#gradient-colors:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    box-shadow: 0 0 6px 1px #0006 inset;
+    z-index: 2;
+    pointer-events: none;
+}
