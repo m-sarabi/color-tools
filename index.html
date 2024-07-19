@@ -14,11 +14,12 @@
 <main>
     <aside id="tools-title">
         <h2>Tools</h2>
-        <hr><br>
-        <button class="sidebar-btn" id="gradient-tool">Gradient Generator</button>
+        <hr>
+        <button class="sidebar-btn" id="gradient-btn">Gradient Generator</button>
+        <button class="sidebar-btn" id="image-palette-btn">Image Palette</button>
     </aside>
     <div id="gradient-tools" class="tool-container">
-        <div id="gradient-inputs">
+        <div class="inputs-container">
             <div class="color-input">
                 <div>
                     <label for="gradient-color1"></label><input type="color" value="#000000" id="gradient-color1">
@@ -34,7 +35,34 @@
                 <input type="number" min="2" max="30" value="10" id="gradient-number">
             </div>
         </div>
-        <div id="gradient-colors"></div>
+        <div class="gradient-colors" id="gradient-colors"></div>
+    </div>
+    <div id="image-palette-tools" class="tool-container">
+        <div class="info">
+            <span class="tool-icon">i</span>
+            <p class="tool-tip">
+                This tool uses the K-Means algorithm to generate a color palette.
+                It may not be accurate for all images, and it may not produce the same palette every time.
+            </p>
+        </div>
+        <div class="inputs-container">
+            <div class="canvas-container">
+                <canvas id="image-preview"></canvas>
+            </div>
+            <div class="color-input">
+                <div>
+                    <input type="file" id="palette-image-file" accept="image/bmp, image/gif, image/jpeg, image/png">
+                </div>
+            </div>
+            <div class="range-input">
+                <label for="palette-range"></label>
+                <input type="range" min="1" max="20" value="10" id="palette-range">
+                <label for="palette-number">Max Colors
+                    <input type="number" min="1" max="20" value="10" id="palette-number">
+                </label>
+            </div>
+        </div>
+        <div class="gradient-colors" id="image-palette-colors"></div>
     </div>
 </main>
 <footer>
