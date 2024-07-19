@@ -1,5 +1,6 @@
 let activeTool;
 let paletteMaxSize = 10;
+let imageFile;
 
 class Gradient {
     constructor(color1, color2, number) {
@@ -161,14 +162,31 @@ function updateGradient() {
 }
 
 async function updateImagePalette(file) {
+    document.getElementById("palette-range").setAttribute('disabled', 'true');
+    document.getElementById("palette-number").setAttribute('disabled', 'true');
     const imagePalette = new ImagePalette(file);
     document.querySelector('#image-palette-colors').innerHTML = "";
     document.querySelector('#image-palette-colors').append(...await imagePalette.gradientElements);
     document.getElementById('palette-image-file').value = "";
+    document.getElementById("palette-range").removeAttribute('disabled');
+    document.getElementById("palette-number").removeAttribute('disabled');
 }
 
 function initEvents() {
     document.addEventListener('input', (e) => {
+            function limitInput(e) {
+                if (e.target.hasAttribute('max')) {
+                    if (parseInt(e.target.value) > parseInt(e.target.getAttribute('max'))) {
+                        e.target.value = e.target.getAttribute('max');
+                    }
+                }
+                if (e.target.hasAttribute('min')) {
+                    if (parseInt(e.target.value) < parseInt(e.target.getAttribute('min'))) {
+                        e.target.value = e.target.getAttribute('min');
+                    }
+                }
+            }
+
             if (activeTool === 'gradient-tool') {
                 if (e.target.nodeName === 'INPUT' && e.target.type === 'color') {
                     switch (e.target.id) {
@@ -178,16 +196,7 @@ function initEvents() {
                             break;
                     }
                 } else if (e.target.nodeName === 'INPUT' && e.target.type === 'number') {
-                    if (e.target.hasAttribute('max')) {
-                        if (parseInt(e.target.value) > parseInt(e.target.getAttribute('max'))) {
-                            e.target.value = e.target.getAttribute('max');
-                        }
-                    }
-                    if (e.target.hasAttribute('min')) {
-                        if (parseInt(e.target.value) < parseInt(e.target.getAttribute('min'))) {
-                            e.target.value = e.target.getAttribute('min');
-                        }
-                    }
+                    limitInput(e);
                     switch (e.target.id) {
                         case 'gradient-number':
                             document.querySelector('#gradient-range').value = e.target.value;
@@ -203,16 +212,7 @@ function initEvents() {
                 updateGradient();
             } else if (activeTool === 'image-palette-tool') {
                 if (e.target.nodeName === 'INPUT' && e.target.type === 'number') {
-                    if (e.target.hasAttribute('max')) {
-                        if (parseInt(e.target.value) > parseInt(e.target.getAttribute('max'))) {
-                            e.target.value = e.target.getAttribute('max');
-                        }
-                    }
-                    if (e.target.hasAttribute('min')) {
-                        if (parseInt(e.target.value) < parseInt(e.target.getAttribute('min'))) {
-                            e.target.value = e.target.getAttribute('min');
-                        }
-                    }
+                    limitInput(e);
                     switch (e.target.id) {
                         case 'palette-number':
                             document.querySelector('#palette-range').value = e.target.value;
@@ -251,9 +251,14 @@ function initEvents() {
     document.addEventListener('change', async function (e) {
         if (e.target.id === 'palette-image-file') {
             const file = e.target.files[0];
+            imageFile = file;
             const imagePalette = new ImagePalette(file);
             await imagePalette.updatePreview();
             updateImagePalette(file).then();
+        } else if (e.target.id === "palette-range" || e.target.id === "palette-number") {
+            if (imageFile) {
+                updateImagePalette(imageFile).then();
+            }
         }
     });
 }
