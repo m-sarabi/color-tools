@@ -259,7 +259,7 @@ div:has(>input[type=color]) {
     margin-left: -13px;
     border-width: 10px;
     border-style: solid;
-    border-color:  transparent transparent #efdd84 transparent;
+    border-color: transparent transparent #efdd84 transparent;
 }
 
 .info:hover .tool-tip {
@@ -270,6 +270,7 @@ div:has(>input[type=color]) {
 #image-preview {
     display: block;
     width: 300px;
+    cursor: pointer;
 }
 
 #palette-image-file {

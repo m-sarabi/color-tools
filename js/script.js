@@ -244,6 +244,8 @@ function initEvents() {
                     activeTool = 'image-palette-tool';
                     break;
             }
+        } else if (e.target.id === 'image-preview') {
+            document.getElementById('palette-image-file').click();
         }
     });
     document.addEventListener('change', async function (e) {
@@ -273,6 +275,16 @@ function init() {
         let parent = input.parentNode;
         parent.style.background = input.value;
     });
+    let canvas = document.getElementById('image-preview');
+    let ctx = canvas.getContext('2d');
+    let selectImage = new Image();
+    selectImage.src = "./assets/select-image.png";
+    selectImage.onload = () => {
+        canvas.width = 300;
+        canvas.height = selectImage.height * 300 / selectImage.width;
+        ctx.drawImage(selectImage, 0, 0, canvas.width, canvas.height);
+    };
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
