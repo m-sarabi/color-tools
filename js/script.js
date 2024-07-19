@@ -278,7 +278,7 @@ function init() {
     let canvas = document.getElementById('image-preview');
     let ctx = canvas.getContext('2d');
     let selectImage = new Image();
-    selectImage.src = "./assets/select-image.png";
+    selectImage.src = "./assets/select-image.jpg";
     selectImage.onload = () => {
         canvas.width = 300;
         canvas.height = selectImage.height * 300 / selectImage.width;
