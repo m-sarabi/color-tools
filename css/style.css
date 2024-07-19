@@ -30,6 +30,12 @@ footer {
     bottom: 0;
 }
 
+footer a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 aside {
     width: 200px;
     height: fit-content;
