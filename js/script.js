@@ -58,7 +58,7 @@ class ImagePalette {
                     canvas.width = img.width / d;
                     canvas.height = img.height / d;
                     const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
                     const pixelArray = [];
                     for (let i = 0; i < data.length; i += 4) {
