@@ -49,6 +49,7 @@ aside {
     top: 0;
     left: 0;
     z-index: 2;
+    transition: transform 0.3s ease;
 }
 
 aside > button {
@@ -72,8 +73,6 @@ input[type=color] {
     width: 100%;
     height: 100%;
 }
-
-/* todo: side bar styles*/
 
 div:has( > input[type=color]) {
     border: 1px solid #0008;
@@ -310,7 +309,6 @@ div:has(>input[type=color]) {
 @media (max-width: 900px) {
     aside {
         transform: translate(calc(-100% + 20px));
-        transition: transform 0.3s ease;
     }
 
     /* drawing an arrow to the right */
