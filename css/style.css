@@ -39,9 +39,10 @@ aside {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
+    z-index: 2;
 }
 
 aside > button {
