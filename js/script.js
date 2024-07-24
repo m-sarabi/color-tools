@@ -1,6 +1,7 @@
 let activeTool;
 let paletteMaxSize = 10;
 let imageFile;
+let paletteMethod = 'median-cut';
 
 class Gradient {
     constructor(color1, color2, number) {
@@ -40,8 +41,9 @@ class Gradient {
 }
 
 class ImagePalette {
-    constructor(file) {
+    constructor(file, method) {
         this.file = file;
+        this.method = method;
     }
 
     async getPixelsArray(file) {
@@ -88,8 +90,15 @@ class ImagePalette {
 
     async getPalette() {
         const pixelArray = await this.getPixelsArray(this.file);
-        let kMeans = new KMeans(paletteMaxSize, pixelArray);
-        let palette = kMeans.getClusters();
+        let palette;
+        if (this.method === 'k-means') {
+            const kMeans = new KMeans(paletteMaxSize, pixelArray);
+            palette = kMeans.getClusters();
+        } else if (this.method === 'median-cut') {
+            const medianCut = new MedianCut(paletteMaxSize, pixelArray);
+            palette = medianCut.run();
+        }
+
         let palettePercentages = [];
         for (let i in palette) {
             palettePercentages.push([new Color(...palette[i].color), Math.round((palette[i].count / pixelArray.length) * 10000) / 100]);
@@ -164,7 +173,7 @@ function updateGradient() {
 async function updateImagePalette(file) {
     document.getElementById("palette-range").setAttribute('disabled', 'true');
     document.getElementById("palette-number").setAttribute('disabled', 'true');
-    const imagePalette = new ImagePalette(file);
+    const imagePalette = new ImagePalette(file, paletteMethod);
     document.querySelector('#image-palette-colors').innerHTML = "";
     document.querySelector('#image-palette-colors').append(...await imagePalette.gradientElements);
     document.getElementById('palette-image-file').value = "";
@@ -252,10 +261,15 @@ function initEvents() {
         if (e.target.id === 'palette-image-file') {
             const file = e.target.files[0];
             imageFile = file;
-            const imagePalette = new ImagePalette(file);
+            const imagePalette = new ImagePalette(file, paletteMethod);
             await imagePalette.updatePreview();
             updateImagePalette(file).then();
         } else if (e.target.id === "palette-range" || e.target.id === "palette-number") {
+            if (imageFile) {
+                updateImagePalette(imageFile).then();
+            }
+        } else if (e.target.id === "palette-method") {
+            paletteMethod = e.target.value;
             if (imageFile) {
                 updateImagePalette(imageFile).then();
             }

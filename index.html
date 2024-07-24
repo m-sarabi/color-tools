@@ -40,10 +40,18 @@
     <div id="image-palette-tools" class="tool-container">
         <div class="info">
             <span class="tool-icon">i</span>
-            <p class="tool-tip">
-                This tool uses the K-Means algorithm to generate a color palette.
-                It may not be accurate for all images, and it may not produce the same palette every time.
-            </p>
+            <div class="tool-tip">
+                <p>
+                    <strong>Median Cut: </strong><br>
+                    Faster (specially for powers of 2), reproducible results,
+                    and generally more accurate.
+                </p>
+                <p>
+                    <strong>K-Means: </strong><br>
+                    Slower, slightly different results on each run (due to randomized
+                    initialization).
+                </p>
+            </div>
         </div>
         <div class="inputs-container">
             <div class="canvas-container">
@@ -55,6 +63,11 @@
                 </div>
             </div>
             <div class="range-input">
+                <label for="palette-method">Method: <select id="palette-method">
+                    <option value="median-cut">Median Cut</option>
+                    <option value="k-means">K-Means</option>
+                </select>
+                </label>
                 <label for="palette-range"></label>
                 <input type="range" min="1" max="20" value="10" id="palette-range">
                 <label for="palette-number">Max Colors

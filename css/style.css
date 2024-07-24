@@ -3,6 +3,9 @@
     padding: 0;
     margin: 0;
 }
+p:not(:last-child) {
+    margin-bottom: 5px;
+}
 
 body {
     min-height: 100vh;
@@ -255,7 +258,7 @@ div:has(>input[type=color]) {
     transition: visibility 0.3s ease, opacity 0.3s ease;
     z-index: 1;
     width: 220px;
-    text-align: justify;
+    text-align: center;
     font-size: 14px;
     background-color: #efdd84;
     border-radius: 10px;

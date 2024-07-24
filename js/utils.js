@@ -1,3 +1,70 @@
+const testColors = [
+    [105, 87, 66],
+    [86, 62, 40],
+    [90, 66, 44],
+    [108, 88, 60],
+    [134, 126, 85],
+    [147, 146, 92],
+    [147, 138, 69],
+    [156, 144, 78],
+    [94, 70, 49],
+    [98, 71, 47],
+    [91, 72, 59],
+    [69, 60, 56],
+    [52, 44, 47],
+    [102, 93, 69],
+    [157, 143, 75],
+    [187, 180, 133],
+    [97, 71, 49],
+    [95, 68, 45],
+    [63, 55, 51],
+    [168, 135, 119],
+    [164, 119, 93],
+    [69, 54, 49],
+    [124, 118, 87],
+    [182, 177, 154],
+    [103, 76, 53],
+    [98, 71, 47],
+    [90, 74, 64],
+    [156, 125, 110],
+    [163, 121, 99],
+    [100, 73, 61],
+    [98, 88, 76],
+    [137, 127, 95],
+    [99, 72, 50],
+    [98, 71, 45],
+    [150, 123, 98],
+    [179, 140, 126],
+    [182, 133, 109],
+    [170, 136, 111],
+    [147, 134, 111],
+    [133, 124, 96],
+    [97, 70, 48],
+    [106, 78, 53],
+    [143, 123, 84],
+    [134, 102, 82],
+    [150, 103, 81],
+    [158, 136, 116],
+    [110, 100, 84],
+    [133, 122, 100],
+    [105, 78, 56],
+    [112, 85, 62],
+    [130, 119, 75],
+    [128, 100, 71],
+    [163, 102, 65],
+    [228, 157, 88],
+    [186, 143, 95],
+    [150, 135, 102],
+    [102, 77, 57],
+    [128, 100, 69],
+    [168, 107, 62],
+    [149, 76, 57],
+    [249, 163, 70],
+    [245, 156, 56],
+    [255, 169, 74],
+    [253, 190, 117]
+];
+
 class Color {
     constructor(r, g = null, b = null) {
         if (g === null && b === null) {
@@ -139,6 +206,137 @@ class KMeans {
                 'count': colorCounts[index]
             };
         });
+    }
+}
+
+class MedianCut {
+    constructor(m, colors) {
+        this.m = m;
+        this.n = 2 ** Math.ceil(Math.log2(m));
+        this.boxes = [new MedianBox(colors)];
+        this.count = 0;
+    }
+
+    run() {
+        while (this.boxes.length < this.n) {
+            const box = this.boxes.shift();
+            if (box.colors.length > 1) {
+                this.boxes.push(...box.split());
+            }
+        }
+
+        this.reduce();
+
+        this.boxes.sort((a, b) => b.colors.length - a.colors.length);
+        const result = [];
+
+        this.boxes.forEach((box) => {
+            result.push({
+                'color': this.calculateMeanColor(box.colors),
+                'count': box.colors.length
+            });
+        });
+
+        return result;
+    }
+
+    calculateMeanColor(colors) {
+        const total = [0, 0, 0];
+        for (let i = 0; i < colors.length; i++) {
+            total[0] += colors[i][0];
+            total[1] += colors[i][1];
+            total[2] += colors[i][2];
+        }
+        return [
+            Math.round(total[0] / colors.length),
+            Math.round(total[1] / colors.length),
+            Math.round(total[2] / colors.length)
+        ];
+    }
+
+    calculateDistance(color1, color2) {
+        const diffR = color1[0] - color2[0];
+        const diffG = color1[1] - color2[1];
+        const diffB = color1[2] - color2[2];
+        return Math.sqrt(diffR * diffR + diffG * diffG + diffB * diffB);
+    }
+
+    findClosestPair() {
+        let minDistance = Infinity;
+        let pair = [0, 1]; // Default pair
+        for (let i = 0; i < this.boxes.length - 1; i++) {
+            for (let j = i + 1; j < this.boxes.length; j++) {
+                const meanColor1 = this.calculateMeanColor(this.boxes[i].colors);
+                const meanColor2 = this.calculateMeanColor(this.boxes[j].colors);
+                const distance = this.calculateDistance(meanColor1, meanColor2);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    pair = [i, j];
+                }
+            }
+        }
+        return pair;
+    }
+
+    reduce() {
+        while (this.boxes.length > this.m) {
+            const pair = this.findClosestPair();
+            const newBox = new MedianBox(this.boxes[pair[0]].colors.concat(this.boxes[pair[1]].colors));
+            this.boxes.splice(pair[1], 1);
+            this.boxes.splice(pair[0], 1);
+            this.boxes.push(newBox);
+        }
+    }
+}
+
+class MedianBox {
+    constructor(colors) {
+        this.colors = colors;
+        this.min = [255, 255, 255];
+        this.max = [0, 0, 0];
+        this.ranges = [0, 0, 0];
+    }
+
+    updateBounds() {
+        for (let i = 0; i < this.colors.length; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (this.colors[i][j] < this.min[j]) {
+                    this.min[j] = this.colors[i][j];
+                }
+                if (this.colors[i][j] > this.max[j]) {
+                    this.max[j] = this.colors[i][j];
+                }
+            }
+        }
+    }
+
+    updateRanges() {
+        for (let i = 0; i < 3; i++) {
+            this.ranges[i] = this.max[i] - this.min[i];
+        }
+    }
+
+    split() {
+        this.updateBounds();
+        this.updateRanges();
+        const longestAxis = this.ranges.indexOf(Math.max(...this.ranges));
+        const middle = (this.min[longestAxis] + this.max[longestAxis]) / 2;
+        const left = [];
+        const right = [];
+        for (let i = 0; i < this.colors.length; i++) {
+            if (this.colors[i][longestAxis] < middle) {
+                left.push(this.colors[i]);
+            } else {
+                right.push(this.colors[i]);
+            }
+        }
+        if (left.length === 0) {
+            return [new MedianBox(right)];
+        }
+        if (right.length === 0) {
+            return [new MedianBox(left)];
+        }
+        return [new MedianBox(left), new MedianBox(right)];
     }
 }
 
